@@ -1,22 +1,26 @@
 import services.IUserAuthenticationService;
 
+import javax.naming.InitialContext;
+import javax.security.auth.login.LoginException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.naming.InitialContext;
-import javax.security.auth.login.LoginException;
-
 public class SecurityUtil
 {
+    /**
+     * route to UserAuthenticationService in J2ee app for realisation IUserAuthenticationService interface
+     */
+    private static final String AUTHENTICATION_INTERFACE = "java:global/pasman/UserAuthenticationService";
     private static Logger logger = Logger.getLogger(SecurityUtil.class.getName());
 
-    public static final String AUTHENTICATION_INTERFACE = "java:global/pasman/UserAuthenticationService";
-
-
+    /**
+     * @param jndiClassname - String  route to jndiClassname ( implements IUserAuthenticationService)
+     * @return object implements IUserAuthenticationService
+     * @throws Exception if jndiClassname not found by param
+     */
     private static IUserAuthenticationService lookupUserValidationService(String jndiClassname) throws Exception
     {
         Properties properties = new Properties();
@@ -32,18 +36,21 @@ public class SecurityUtil
         return (IUserAuthenticationService) object;
     }
 
-
+    /**
+     * Try to authenticate User by name and password
+     *
+     * @param username String username
+     * @param password char[] arrey of user password
+     * @throws LoginException if system cant validate user.
+     */
     public static void authenticateUser(String username, char[] password) throws LoginException
     {
         logger.log(Level.WARNING, AUTHENTICATION_INTERFACE + " trying to authenticate user " + username);
 
         try
         {
-            //logger.log(Level.WARNING,"user password: " + password);
-            System.err.println("user password: " + password.toString() + "\n user name: "+username );
             IUserAuthenticationService validationService = lookupUserValidationService(AUTHENTICATION_INTERFACE);
             validationService.validatePassword(username, new String(password));
-
         }
         catch (LoginException e)
         {
@@ -56,8 +63,9 @@ public class SecurityUtil
 
     /**
      * Returns the groups of this user
+     * @param usid User name
+     * @return List<String> of user groups
      */
-
     public static List<String> getGroups(String usid)
     {
         List<String> result = new ArrayList<String>();

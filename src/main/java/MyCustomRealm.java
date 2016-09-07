@@ -1,3 +1,9 @@
+import com.sun.appserv.security.AppservRealm;
+import com.sun.enterprise.security.auth.realm.BadRealmException;
+import com.sun.enterprise.security.auth.realm.InvalidOperationException;
+import com.sun.enterprise.security.auth.realm.NoSuchRealmException;
+import com.sun.enterprise.security.auth.realm.NoSuchUserException;
+
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Map.Entry;
@@ -5,18 +11,10 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sun.appserv.security.AppservRealm;
-import com.sun.enterprise.security.auth.realm.BadRealmException;
-import com.sun.enterprise.security.auth.realm.InvalidOperationException;
-import com.sun.enterprise.security.auth.realm.NoSuchRealmException;
-import com.sun.enterprise.security.auth.realm.NoSuchUserException;
-
-import static java.security.Security.setProperty;
-
 /**
  * Custom Realm class
  *
- * @author dgisbert
+ * @author Created by Max on 05.09.2016.
  */
 
 public class MyCustomRealm extends AppservRealm
